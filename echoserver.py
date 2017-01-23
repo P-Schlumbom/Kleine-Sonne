@@ -62,6 +62,8 @@ def process_message(incoming):
     return "and prolongs itself out of weakness"
   elif incoming == "Jeder fuer sich":
     return "und gott gegen alle"
+  elif incoming == "Version?":
+    return "messaging-testing: 0"
   else:
      return incoming
     
