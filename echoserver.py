@@ -64,7 +64,7 @@ def process_message(incoming):
     return "und gott gegen alle"
   elif incoming == "Version?":
     return "messaging-testing: 0"
-  elif "hello" in s.lower(incoming):
+  elif "hello" in incoming:
     return "Hi there!"
   else:
      return incoming
