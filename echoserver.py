@@ -57,17 +57,18 @@ def send_message(token, recipient, text):
 
 def process_message(incoming):
   incoming = incoming.lower()
-  greetings = ["hello", "hi", "good morning", "good evening", "good day", "good afternoon"]
+  greetings = ["hello", "hi ", "good morning", "good evening", "good day", "good afternoon"]
+  tatas = ["goodbye", "bye", "see ya", "see you later", "writerlator", "good night"]
   if any(word in incoming for word in greetings):
     return "Hi!"
+  elif any(word in incoming for word in tatas):
+    return "See you later!"
   elif "every existing thing is born without reason" in incoming:
     return "and prolongs itself out of weakness"
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "messaging-testing: 0.3"
-  elif "hello" in incoming:
-    return "Hi there!"
+    return "messaging-testing: 0.4"
   else:
      return incoming
     
