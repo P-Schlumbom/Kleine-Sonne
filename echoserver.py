@@ -36,14 +36,7 @@ def messaging_events(payload):
   messaging_events = data["entry"][0]["messaging"]
   for event in messaging_events:
     if "message" in event and "text" in event["message"]:
-      if event["message"]["text"] == "Hello" or event["message"]["text"] == "Hi" or event["message"]["text"] == "Good morning" or event["message"]["text"] == "Good afternoon":
-        yield event["sender"]["id"], "Hi!"
-      elif event["message"]["text"] == "Every existing thing is born without reason":
-        yield event["sender"]["id"], "and prolongs itself out of weakness"
-      elif event["message"]["text"] == "Jeder fuer sich":
-        yield event["sender"]["id"], "und gott gegen alle"
-      else:
-        yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
+        yield event["sender"]["id"], process_message(event["message"]["text"])
     else:
       yield event["sender"]["id"], "I can't echo this"
 
@@ -62,5 +55,22 @@ def send_message(token, recipient, text):
   if r.status_code != requests.codes.ok:
     print(r.text)
 
+def process_message(incoming):
+  incoming = incoming.lower()
+  greetings = ["hello", "hi ", "good morning", "good evening", "good day", "good afternoon"]
+  tatas = ["goodbye", "bye", "see ya", "see you later", "writerlator", "good night"]
+  if any(word in incoming for word in greetings):
+    return "Hi!"
+  elif any(word in incoming for word in tatas):
+    return "See you later!"
+  elif "every existing thing is born without reason" in incoming:
+    return "and prolongs itself out of weakness"
+  elif "jeder fuer sich" in incoming:
+    return "und gott gegen alle"
+  elif "version?" in incoming:
+    return "messaging-testing: 0.4"
+  else:
+     return incoming
+    
 if __name__ == '__main__':
   app.run()
