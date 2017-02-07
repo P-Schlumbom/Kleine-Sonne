@@ -1,12 +1,21 @@
 from flask import Flask, request
 import json
 import requests
+import numpy as np
+import pyowm
+from wit import Wit
 
 app = Flask(__name__)
 
 # This needs to be filled with the Page Access Token that will be provided
 # by the Facebook App that will be created.
 PAT = 'EAAFsUgXKDNgBAE4Ni76NlZBm1WKOWC8KRMZBsZCmkK6yCVRLUfjsw73qZBIb7rRHSAPibTDZBfPuY5GTcTYhZBI3wUYUDxTZCPZAG6QI5J114ezTPp7PCUygmZBh9rTmeHa0qIWIX56rKbRdiVIyzF7flfQltQrc5d7oJrtPhTkWITAZDZD'
+
+#pyowm setup
+owm = pyowm.OWM('b458d73d80151ce2be0d359eb826b549')  # pyowm api key
+location = 'Auckland,nz'
+
+witAccessToken = '3KNHMXJ5LNQPUCRSKH3JJDIZTTQW4QEX'   # use this to access wit
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -36,14 +45,7 @@ def messaging_events(payload):
   messaging_events = data["entry"][0]["messaging"]
   for event in messaging_events:
     if "message" in event and "text" in event["message"]:
-      if event["message"]["text"] == "Hello" or event["message"]["text"] == "Hi" or event["message"]["text"] == "Good morning" or event["message"]["text"] == "Good afternoon":
-        yield event["sender"]["id"], "Hi!"
-      elif event["message"]["text"] == "Every existing thing is born without reason":
-        yield event["sender"]["id"], "and prolongs itself out of weakness"
-      elif event["message"]["text"] == "Jeder fuer sich":
-        yield event["sender"]["id"], "und gott gegen alle"
-      else:
-        yield event["sender"]["id"], event["message"]["text"].encode('unicode_escape')
+        yield event["sender"]["id"], process_message(event["message"]["text"])
     else:
       yield event["sender"]["id"], "I can't echo this"
 
@@ -62,5 +64,86 @@ def send_message(token, recipient, text):
   if r.status_code != requests.codes.ok:
     print(r.text)
 
+def process_message(incoming):
+  incoming = incoming.lower()
+  greetings = ["hello", "hi ", "good morning", "good evening", "good day", "good afternoon"]
+  tatas = ["goodbye", "bye", "see ya", "see you later", "writerlator", "good night"]
+  if any(word in incoming for word in greetings):
+    return "Hi!"
+  elif any(word in incoming for word in tatas):
+    return "See you later!"
+  elif "every existing thing is born without reason" in incoming:
+    return "and prolongs itself out of weakness"
+  elif "jeder fuer sich" in incoming:
+    return "und gott gegen alle"
+  elif "version?" in incoming:
+    return "test1: 0.3"
+  elif "random?" in incoming:
+    return str(np.random.rand())
+  elif "weather?" in incoming:
+    return get_weather()
+  elif "wit?" in incoming:
+    return wit_run()
+  else:
+     return incoming
+
+def get_weather():
+  """
+  simply tries to retrieve the current weather status in Auckland, returns a warning instead if this isn't possible
+  """
+  weatherReport = ""
+  observation = owm.weather_at_place(location)
+  w = observation.get_weather()
+  try:
+    weatherReport = w.get_detailed_status()
+  except:
+    weatherReport = "Sorry, pyowm is being a little bitch and won't tell me nothin"
+  return weatherReport
+
+#-----------the following functions concern wit integration--------------------#
+
+def first_entity_value(entities, entity):
+  if entity not in entities:
+    return None
+  val = entities[entity][0]['value']
+  if not val:
+    return None
+  return val['value'] if isinstance(val, dict) else val
+
+def send(request, response):
+  return response['text']
+
+def get_forecast(request):
+  context = request['context']
+  entities = request['entities']
+  
+  loc = first_entity_value(entities, 'location')
+  if loc:
+    context['forecast'] = 'sunny'
+    if context.get('missingLocation') is not None:
+      del context['missingLocation']
+    else:
+      context['missingLocation'] = True
+      if context.get('forecast') is not None:
+        del context['forecast']
+  return context
+
+actions = {'send': send, 'getForecast': get_forecast,}
+
+def wit_run():
+  """
+  tries to get a response from wit, and returns it.
+  """
+  witReport = ""
+  client = Wit(access_token=witAccessToken, actions=actions)
+  resp = client.converse('us-1', message='hello there')
+  
+  try:
+    witReport = resp['msg']
+  except:
+    witReport = "Wit didn't like that, here's what we got: " + str(resp)
+  
+  return witReport
+    
 if __name__ == '__main__':
   app.run()
