@@ -1,6 +1,7 @@
 from flask import Flask, request
 import json
 import requests
+import numpy as np
 
 app = Flask(__name__)
 
@@ -68,7 +69,9 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "messaging-testing: 0.4"
+    return "test1: 0.1"
+  elif "random?" in incoming:
+    return str(np.random.rand())
   else:
      return incoming
     
