@@ -2,12 +2,17 @@ from flask import Flask, request
 import json
 import requests
 import numpy as np
+import pyowm
 
 app = Flask(__name__)
 
 # This needs to be filled with the Page Access Token that will be provided
 # by the Facebook App that will be created.
 PAT = 'EAAFsUgXKDNgBAE4Ni76NlZBm1WKOWC8KRMZBsZCmkK6yCVRLUfjsw73qZBIb7rRHSAPibTDZBfPuY5GTcTYhZBI3wUYUDxTZCPZAG6QI5J114ezTPp7PCUygmZBh9rTmeHa0qIWIX56rKbRdiVIyzF7flfQltQrc5d7oJrtPhTkWITAZDZD'
+
+#pyowm setup
+owm = pyowm.OWM('b458d73d80151ce2be0d359eb826b549')  # pyowm api key
+location = 'Auckland,nz'
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -72,8 +77,20 @@ def process_message(incoming):
     return "test1: 0.1"
   elif "random?" in incoming:
     return str(np.random.rand())
+  elif "weather?" in incoming:
+    return get_weather()
   else:
      return incoming
+
+def get_weather():
+  weatherReport = ""
+  observation = owm.weather_at_place(location)
+  w = observation.get_weather()
+  try:
+    weatherReport = w.get_detailed_status()
+  except:
+    weatherReport = "Sorry, pyowm is being a little bitch and won't tell me nothin"
+  return weatherReport
     
 if __name__ == '__main__':
   app.run()
