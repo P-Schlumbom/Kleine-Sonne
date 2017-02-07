@@ -3,6 +3,7 @@ import json
 import requests
 import numpy as np
 import pyowm
+from wit import Wit
 
 app = Flask(__name__)
 
@@ -13,6 +14,8 @@ PAT = 'EAAFsUgXKDNgBAE4Ni76NlZBm1WKOWC8KRMZBsZCmkK6yCVRLUfjsw73qZBIb7rRHSAPibTDZ
 #pyowm setup
 owm = pyowm.OWM('b458d73d80151ce2be0d359eb826b549')  # pyowm api key
 location = 'Auckland,nz'
+
+witAccessToken = '3KNHMXJ5LNQPUCRSKH3JJDIZTTQW4QEX'   # use this to access wit
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -74,15 +77,20 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "test1: 0.2"
+    return "test1: 0.3"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
     return get_weather()
+  elif "wit?" in incoming:
+    return wit_run()
   else:
      return incoming
 
 def get_weather():
+  """
+  simply tries to retrieve the current weather status in Auckland, returns a warning instead if this isn't possible
+  """
   weatherReport = ""
   observation = owm.weather_at_place(location)
   w = observation.get_weather()
@@ -91,6 +99,51 @@ def get_weather():
   except:
     weatherReport = "Sorry, pyowm is being a little bitch and won't tell me nothin"
   return weatherReport
+
+#-----------the following functions concern wit integration--------------------#
+
+def first_entity_value(entities, entity):
+  if entity not in entities:
+    return None
+  val = entities[entity][0]['value']
+  if not val:
+    return None
+  return val['value'] if isinstance(val, dict) else val
+
+def send(request, response):
+  return response['text']
+
+def get_forecast(request):
+  context = request['context']
+  entities = request['entities']
+  
+  loc = first_entity_value(entities, 'location')
+  if loc:
+    context['forecast'] = 'sunny'
+    if context.get('missingLocation') is not None:
+      del context['missingLocation']
+    else:
+      context['missingLocation'] = True
+      if context.get('forecast') is not None:
+        del context['forecast']
+  return context
+
+actions = {'send': send, 'getForecast': get_forecast,}
+
+def wit_run():
+  """
+  tries to get a response from wit, and returns it.
+  """
+  witReport = ""
+  client = Wit(access_token=witAccessToken, actions=actions)
+  resp = client.converse('us-1', message='hello there')
+  
+  try:
+    witReport = resp['msg']
+  except:
+    witReport = "Wit didn't like that, here's what we got: " + str(resp)
+  
+  return witReport
     
 if __name__ == '__main__':
   app.run()
