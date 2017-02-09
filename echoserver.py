@@ -133,7 +133,7 @@ def wit_run():
   tries to get a response from wit, and returns it.
   """
   witReport = ""
-  client = Wit(access_token=witAccessToken, actions=actions)
+  
   resp = client.converse('us-1', message='hello there')
   
   try:
@@ -142,7 +142,9 @@ def wit_run():
     witReport = "Wit didn't like that, here's what we got: " + str(resp)
   
   return witReport
-    
+
+client = Wit(access_token=witAccessToken, actions=actions)
+
 if __name__ == '__main__':
   app.run()
 '''
