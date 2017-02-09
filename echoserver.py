@@ -5,7 +5,7 @@ import numpy as np
 import pyowm
 from wit import Wit
 
-'''app = Flask(__name__)
+app = Flask(__name__)
 
 # This needs to be filled with the Page Access Token that will be provided
 # by the Facebook App that will be created.
@@ -75,7 +75,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "master: 0.2"
+    return "wit-integration: 0.0"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
@@ -320,3 +320,4 @@ client = Wit(access_token=WIT_TOKEN, actions=actions)
 
 if __name__ == '__main__':
   app.run()
+'''
