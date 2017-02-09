@@ -144,7 +144,8 @@ def wit_run():
   return witReport
     
 if __name__ == '__main__':
-  app.run()'''
+  app.run()
+'''
 #--------------------------------------------------------------------------------------------------------------------------------#
 app = Flask(__name__)
 
@@ -312,8 +313,7 @@ def wit_run():
 # Setup Actions
 actions = {
     'send': send,
-    'getForecast': get_forecast,
-}
+    'getForecast': get_forecast,}
 
 # Setup Wit Client
 client = Wit(access_token=WIT_TOKEN, actions=actions)
