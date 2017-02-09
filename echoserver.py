@@ -11,7 +11,9 @@ app = Flask(__name__)
 # by the Facebook App that will be created.
 PAT = 'EAAFsUgXKDNgBAE4Ni76NlZBm1WKOWC8KRMZBsZCmkK6yCVRLUfjsw73qZBIb7rRHSAPibTDZBfPuY5GTcTYhZBI3wUYUDxTZCPZAG6QI5J114ezTPp7PCUygmZBh9rTmeHa0qIWIX56rKbRdiVIyzF7flfQltQrc5d7oJrtPhTkWITAZDZD'
 
-
+#pyowm setup
+owm = pyowm.OWM('b458d73d80151ce2be0d359eb826b549')  # pyowm api key
+location = 'Auckland,nz'
 
 witAccessToken = '3KNHMXJ5LNQPUCRSKH3JJDIZTTQW4QEX'   # use this to access wit
 
@@ -90,9 +92,9 @@ def get_weather():
   simply tries to retrieve the current weather status in Auckland, returns a warning instead if this isn't possible
   """
   weatherReport = ""
-  #observation = owm.weather_at_place(location)
-  #w = observation.get_weather()
-  try:
+  observation = owm.weather_at_place(location)
+  w = observation.get_weather()
+  '''try:
     observation = owm.weather_at_place(location)
   except:
     weatherReport = "1: cannot create observation"
@@ -102,12 +104,12 @@ def get_weather():
     w = observation.get_weather()
   except:
     weatherReport = "2: cannot get weather"
-    return weatherReport
+    return weatherReport'''
   
   try:
     weatherReport = w.get_detailed_status()
   except:
-    weatherReport = "3: Sorry, pyowm is being a little bitch and won't tell me nothin"
+    weatherReport = "Sorry, pyowm is being a little bitch and won't tell me nothin"
   return weatherReport
 
 #-----------the following functions concern wit integration--------------------#
