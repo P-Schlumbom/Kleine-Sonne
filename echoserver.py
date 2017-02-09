@@ -90,9 +90,11 @@ def get_weather():
   simply tries to retrieve the current weather status in Auckland, returns a warning instead if this isn't possible
   """
   weatherReport = ""
-  observation = owm.weather_at_place(location)
-  w = observation.get_weather()
+  #observation = owm.weather_at_place(location)
+  #w = observation.get_weather()
   try:
+    observation = owm.weather_at_place(location)
+    w = observation.get_weather()
     weatherReport = w.get_detailed_status()
   except:
     weatherReport = "Sorry, pyowm is being a little bitch and won't tell me nothin"
