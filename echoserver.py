@@ -17,6 +17,8 @@ location = 'Auckland,nz'
 
 witAccessToken = '3KNHMXJ5LNQPUCRSKH3JJDIZTTQW4QEX'   # use this to access wit
 
+witResponse = ""
+
 @app.route('/', methods=['GET'])
 def handle_verification():
   print("Handling Verification.")
@@ -77,13 +79,14 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "wit-integration: 0.0"
+    return "wit-integration: 0.1"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
     return get_weather()
   elif "wit?" in incoming:
-    return wit_run()
+    wit_run()
+    return witResponse
   else:
      return incoming
 
@@ -94,17 +97,6 @@ def get_weather():
   weatherReport = ""
   observation = owm.weather_at_place(location)
   w = observation.get_weather()
-  '''try:
-    observation = owm.weather_at_place(location)
-  except:
-    weatherReport = "1: cannot create observation"
-    return weatherReport
-  
-  try:
-    w = observation.get_weather()
-  except:
-    weatherReport = "2: cannot get weather"
-    return weatherReport'''
   
   try:
     weatherReport = w.get_detailed_status()
@@ -123,6 +115,8 @@ def first_entity_value(entities, entity):
   return val['value'] if isinstance(val, dict) else val
 
 def send(request, response):
+  global witResponse
+  witResponse = str(response['text'])
   return response['text']
 
 def get_forecast(request):
@@ -148,7 +142,8 @@ def wit_run():
   """
   witReport = ""
   client = Wit(access_token=witAccessToken, actions=actions)   #  This was outside the function, but get_weather() didn't like that for some reason?
-  resp = client.converse('us-1', message='hello there')
+  #resp = client.converse('us-1', message='hello there')
+  resp = client.run_actions('us-1', message='hello there')
   
   try:
     witReport = resp['msg']
