@@ -94,10 +94,20 @@ def get_weather():
   #w = observation.get_weather()
   try:
     observation = owm.weather_at_place(location)
+  except:
+    weatherReport = "1: cannot create observation"
+    return weatherReport
+  
+  try:
     w = observation.get_weather()
+  except:
+    weatherReport = "2: cannot get weather"
+    return weatherReport
+  
+  try:
     weatherReport = w.get_detailed_status()
   except:
-    weatherReport = "Sorry, pyowm is being a little bitch and won't tell me nothin"
+    weatherReport = "3: Sorry, pyowm is being a little bitch and won't tell me nothin"
   return weatherReport
 
 #-----------the following functions concern wit integration--------------------#
