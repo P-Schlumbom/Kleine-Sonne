@@ -79,16 +79,17 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "wit-integration: 0.1"
+    return "wit-integration: 0.2"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
     return get_weather()
-  elif "wit?" in incoming:
-    wit_run()
-    return witResponse
   else:
-     return incoming
+    try:
+      wit_run(incoming)
+      return witResponse
+    except:
+      return incoming
 
 def get_weather():
   """
@@ -136,14 +137,14 @@ def get_forecast(request):
 
 actions = {'send': send, 'getForecast': get_forecast,}
 
-def wit_run():
+def wit_run(mess):
   """
   tries to get a response from wit, and returns it.
   """
   witReport = ""
   client = Wit(access_token=witAccessToken, actions=actions)   #  This was outside the function, but get_weather() didn't like that for some reason?
   #resp = client.converse('us-1', message='hello there')
-  resp = client.run_actions('us-1', message='hello there')
+  resp = client.run_actions('us-1', message=mess)
   
   try:
     witReport = resp['msg']
