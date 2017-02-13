@@ -141,8 +141,7 @@ def get_forecast(request):
         #feedbackReport += " forecast is not None."
         feedbackReport = feedbackReport + " forecast is not None."
         del context['forecast']
-        feedbackReport = feedbackReport + " Maybe? "
-  feedbackReport = feedbackReport + " Outgoing context..."
+  feedbackReport = feedbackReport + " Outgoing context..." + str(context)
   return context
 
 actions = {'send': send, 'getForecast': get_forecast,}
