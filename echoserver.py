@@ -139,7 +139,7 @@ def get_forecast(request):
       context['missingLocation'] = True
       if context.get('forecast') is not None:
         #feedbackReport += " forecast is not None."
-        feedbackReport = feedbackReport + " forecast is not None."
+        feedbackReport = feedbackReport + " forecast is not None, it is " + str(context['forecast'])
         del context['forecast']
   feedbackReport = feedbackReport + " Outgoing context..." + str(context)
   return context
