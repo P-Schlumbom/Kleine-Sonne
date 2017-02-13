@@ -18,6 +18,7 @@ location = 'Auckland,nz'
 witAccessToken = '3KNHMXJ5LNQPUCRSKH3JJDIZTTQW4QEX'   # use this to access wit
 
 witResponse = ""
+feedbackReport = "No Report"
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -73,7 +74,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "wit-integration: 0.2.4"
+    return "wit-integration: 0.2.5"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
@@ -82,7 +83,8 @@ def process_message(incoming):
     try:
       #wit_run(incoming)
       client.run_actions('us-1', message=incoming)
-      return witResponse
+      #return witResponse
+      return feedbackReport
     except:
       return "My dynos are spent. My line has ended. Heroku has deserted us. Wit.ai's betrayed me. Abandon your posts! Flee, flee for your lives!"
 
@@ -119,7 +121,8 @@ def get_forecast(request):
   context = request['context']
   entities = request['entities']
   
-  witResponse = "well, something's working at least..."
+  global feedbackReport
+  feedbackReport = "well, something's working at least..."
   
   loc = first_entity_value(entities, 'location')
   if loc:
