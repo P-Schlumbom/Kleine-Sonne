@@ -79,17 +79,18 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "wit-integration: 0.2.2"
+    return "wit-integration: 0.2.3"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
     return get_weather()
   else:
     try:
-      wit_run(incoming)
+      #wit_run(incoming)
+      client.run_actions('us-1', message=incoming)
       return witResponse
     except:
-      return "Wit has failed us!! Panic, for all is lost!"
+      return "My dynos are spent. My line has ended. Heroku has deserted us. Wit.ai's betrayed me. Abandon your posts! Flee, flee for your lives!"
 
 def get_weather():
   """
@@ -137,7 +138,7 @@ def get_forecast(request):
 
 actions = {'send': send, 'getForecast': get_forecast,}
 
-def wit_run(mess):
+'''def wit_run(mess):
   """
   tries to get a response from wit, and returns it.
   """
@@ -151,9 +152,9 @@ def wit_run(mess):
   except:
     witReport = "Wit didn't like that, here's what we got: " + str(resp)
   
-  return witReport
+  return witReport'''
 
-
+client = Wit(access_token=witAccessToken, actions=actions)
 
 if __name__ == '__main__':
   app.run()
