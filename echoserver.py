@@ -84,7 +84,7 @@ def process_message(incoming):
       #wit_run(incoming)
       client.run_actions('us-1', message=incoming)
       #return witResponse
-      return feedbackReport
+      return witResponse + ", " + feedbackReport
     except:
       return "My dynos are spent. My line has ended. Heroku has deserted us. Wit.ai's betrayed me. Abandon your posts! Flee, flee for your lives!"
 
