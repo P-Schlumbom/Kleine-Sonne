@@ -21,21 +21,15 @@ witResponse = ""
 
 @app.route('/', methods=['GET'])
 def handle_verification():
-  print("Handling Verification.")
   if request.args.get('hub.verify_token', '') == 'my_voice_is_my_password_verify_me':
-    print("Verification successful!")
     return request.args.get('hub.challenge', '')
   else:
-    print("Verification failed!")
     return 'Error, wrong validation token'
 
 @app.route('/', methods=['POST'])
 def handle_messages():
-  print("Handling Messages")
   payload = request.get_data()
-  print(payload)
   for sender, message in messaging_events(payload):
-    print("Incoming from %s: %s" % (sender, message))
     send_message(PAT, sender, message)
   return "ok"
 
@@ -79,7 +73,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "wit-integration: 0.2.3"
+    return "wit-integration: 0.2.4"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
@@ -124,6 +118,8 @@ def send(request, response):
 def get_forecast(request):
   context = request['context']
   entities = request['entities']
+  
+  witResponse = "well, something's working at least..."
   
   loc = first_entity_value(entities, 'location')
   if loc:
