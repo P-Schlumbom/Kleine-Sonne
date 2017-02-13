@@ -74,7 +74,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "wit-integration: 0.2.8"
+    return "wit-integration: 0.2.9"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
