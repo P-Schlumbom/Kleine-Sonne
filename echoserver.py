@@ -74,7 +74,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "wit-integration: 0.2.6"
+    return "wit-integration: 0.2.7"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
@@ -122,11 +122,12 @@ def get_forecast(request):
   entities = request['entities']
   
   global feedbackReport
-  feedbackReport = "well, something's working at least..."
+  feedbackReport = "well, something's working at least..." + "farts"
   
   loc = first_entity_value(entities, 'location')
   if loc:
     #feedbackReport += "loc is true, "
+    #feedbackReport = feedbackReport + "loc is true"
     context['forecast'] = 'sunny'
     if context.get('missingLocation') is not None:
       #feedbackReport += "missingLocation is not None."
