@@ -74,7 +74,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "wit-integration: 0.2.5"
+    return "wit-integration: 0.2.6"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
@@ -84,7 +84,7 @@ def process_message(incoming):
       #wit_run(incoming)
       client.run_actions('us-1', message=incoming)
       #return witResponse
-      return feedbackReport
+      return (witResponse + ", " + feedbackReport)
     except:
       return "My dynos are spent. My line has ended. Heroku has deserted us. Wit.ai's betrayed me. Abandon your posts! Flee, flee for your lives!"
 
@@ -126,12 +126,16 @@ def get_forecast(request):
   
   loc = first_entity_value(entities, 'location')
   if loc:
+    feedbackReport += "loc is true, "
     context['forecast'] = 'sunny'
     if context.get('missingLocation') is not None:
+      feedbackReport += "missingLocation is not None."
       del context['missingLocation']
     else:
+      feedbackReport += "missingLocation is None.
       context['missingLocation'] = True
       if context.get('forecast') is not None:
+        feedbackReport += " forecast is not None."
         del context['forecast']
   return context
 
