@@ -126,16 +126,16 @@ def get_forecast(request):
   
   loc = first_entity_value(entities, 'location')
   if loc:
-    feedbackReport += "loc is true, "
+    #feedbackReport += "loc is true, "
     context['forecast'] = 'sunny'
     if context.get('missingLocation') is not None:
-      feedbackReport += "missingLocation is not None."
+      #feedbackReport += "missingLocation is not None."
       del context['missingLocation']
     else:
-      feedbackReport += "missingLocation is None.
+      #feedbackReport += "missingLocation is None.
       context['missingLocation'] = True
       if context.get('forecast') is not None:
-        feedbackReport += " forecast is not None."
+        #feedbackReport += " forecast is not None."
         del context['forecast']
   return context
 
