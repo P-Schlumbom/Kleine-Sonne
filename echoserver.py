@@ -79,7 +79,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "wit-integration: 0.2"
+    return "wit-integration: 0.2.1"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
@@ -118,7 +118,7 @@ def first_entity_value(entities, entity):
 def send(request, response):
   global witResponse
   witResponse = str(response['text'])
-  return response['text']
+  return str(response['text'])
 
 def get_forecast(request):
   context = request['context']
