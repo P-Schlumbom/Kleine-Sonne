@@ -74,7 +74,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "wit-integration: 0.2.10"
+    return "wit-integration: 0.2.11"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
@@ -133,14 +133,14 @@ def get_forecast(request):
       #feedbackReport += "missingLocation is not None."
       feedbackReport = feedbackReport + "missingLocation is not None."
       del context['missingLocation']
-    else:
-      #feedbackReport += "missingLocation is None.
-      feedbackReport = feedbackReport + "missingLocation is None."
-      context['missingLocation'] = True
-      if context.get('forecast') is not None:
-        #feedbackReport += " forecast is not None."
-        feedbackReport = feedbackReport + " forecast is not None, it is " + str(context['forecast'])
-        del context['forecast']
+  else:
+    #feedbackReport += "missingLocation is None.
+    feedbackReport = feedbackReport + "missingLocation is None."
+    context['missingLocation'] = True
+    if context.get('forecast') is not None:
+      #feedbackReport += " forecast is not None."
+      feedbackReport = feedbackReport + " forecast is not None, it is " + str(context['forecast'])
+      del context['forecast']
   feedbackReport = feedbackReport + " Outgoing context..." + str(context)
   return context
 
