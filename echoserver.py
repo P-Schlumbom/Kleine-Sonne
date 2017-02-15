@@ -13,7 +13,7 @@ PAT = 'EAAFsUgXKDNgBAE4Ni76NlZBm1WKOWC8KRMZBsZCmkK6yCVRLUfjsw73qZBIb7rRHSAPibTDZ
 
 #pyowm setup
 owm = pyowm.OWM('b458d73d80151ce2be0d359eb826b549')  # pyowm api key
-location = 'Auckland,nz'
+#location = 'Auckland,nz'
 
 witAccessToken = '3KNHMXJ5LNQPUCRSKH3JJDIZTTQW4QEX'   # use this to access wit
 
@@ -74,7 +74,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "wit-integration: 0.3"
+    return "wit-integration: 0.4"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
@@ -88,7 +88,7 @@ def process_message(incoming):
     except:
       return "My dynos are spent. My line has ended. Heroku has deserted us. Wit.ai's betrayed me. Abandon your posts! Flee, flee for your lives!"
 
-def get_weather():
+def get_weather(location='Auckland,nz'):
   """
   simply tries to retrieve the current weather status in Auckland, returns a warning instead if this isn't possible
   """
@@ -128,7 +128,13 @@ def get_forecast(request):
   if loc:
     #feedbackReport += "loc is true, "
     feedbackReport = feedbackReport + " loc is true, "
-    context['forecast'] = 'sunny'
+    #context['forecast'] = 'sunny'
+    weatherStatus = ''
+    try:
+      weatherStatus = get_weather(entities['location'][0]['value])
+    except:
+      weatherStatus = 'RETRIEVAL ERROR'                                                      
+    context['forecast'] = weatherStatus
     if context.get('missingLocation') is not None:
       #feedbackReport += "missingLocation is not None."
       feedbackReport = feedbackReport + "missingLocation is not None."
