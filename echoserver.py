@@ -74,7 +74,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "wit-integration: 0.4"
+    return "wit-integration: 0.4.1"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "weather?" in incoming:
@@ -129,12 +129,12 @@ def get_forecast(request):
     #feedbackReport += "loc is true, "
     feedbackReport = feedbackReport + " loc is true, "
     #context['forecast'] = 'sunny'
-    weatherLoc = ''
+    weatherStatus = ''
     try:
       #weatherStatus = get_weather(entities['location'][0]['value'])
-      weatherLoc = loc
+      weatherStatus = get_weather(loc)
     except:
-      weatherLoc = 'RETRIEVAL ERROR'                                                      
+      weatherStatus = 'RETRIEVAL ERROR'                                                      
     context['forecast'] = weatherLoc
     if context.get('missingLocation') is not None:
       #feedbackReport += "missingLocation is not None."
