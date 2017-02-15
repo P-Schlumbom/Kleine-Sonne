@@ -135,7 +135,7 @@ def get_forecast(request):
       weatherStatus = get_weather(loc)
     except:
       weatherStatus = 'RETRIEVAL ERROR'                                                      
-    context['forecast'] = weatherLoc
+    context['forecast'] = weatherStatus
     if context.get('missingLocation') is not None:
       #feedbackReport += "missingLocation is not None."
       feedbackReport = feedbackReport + "missingLocation is not None."
