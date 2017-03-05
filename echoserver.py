@@ -317,7 +317,7 @@ def decide_sweater():
   #print("PREDICTING")
   prediction = net.predict(inputVar)
   #print(prediction)
-  if prediction[0] > 0:
+  if prediction[0] > 0.5:
     return "You'll need a sweater"
   else:
     return "You won't need a sweater"
