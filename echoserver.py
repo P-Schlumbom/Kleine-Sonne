@@ -231,19 +231,19 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "FNN-integration: 1.1"
+    return "FNN-integration: 1.2"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "fnn?" in incoming:
-    resp = str(decide_sweater())
-    return resp
-    #try:
-    #  #net = FNN(3, 6, 1, 'mem_1.txt')
-    #  #return str(net)
-    #  resp = str(decide_sweater())
-    #  return resp
-    #except:
-    #  return "FNN dont wanna FNN"
+    #resp = str(decide_sweater())
+    #return resp
+    try:
+      #net = FNN(3, 6, 1, 'mem_1.txt')
+      #return str(net)
+      resp = str(decide_sweater())
+      return resp
+    except:
+      return "FNN dont wanna FNN"
   else:
     try:
       #wit_run(incoming)
@@ -302,12 +302,13 @@ def decide_sweater():
   print("CREATING NETWORK")
   net = FNN(3, 6, 1, 'mem_1.txt')
   print("GETTING DATA")
+  inputVar = []
   try:
     inputVar = get_data()
   except:
     return "Can't get data! PANIC!!!"
   print("PREDICTING")
-  prediction = net.predict()
+  prediction = net.predict(inputVar)
   print(prediction)
   if prediction[0] > 0:
     return "You'll need a sweater"
