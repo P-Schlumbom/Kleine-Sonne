@@ -329,7 +329,7 @@ def train_sweater(expectedVal):
   except:
     return "Invalid input, chump!"
   #net.quick_train(inputVar, [val])
-  net.train([var])
+  net.train([val])
   reportString = "Trained. New output: "# + str(net.predict(inputVar))
   return reportString
   
