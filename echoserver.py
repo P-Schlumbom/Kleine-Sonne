@@ -234,7 +234,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "FNN-integration: 2.0"
+    return "FNN-integration: 2.1"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "fnn?" in incoming:
@@ -328,8 +328,9 @@ def train_sweater(expectedVal):
     val = int(expectedVal)
   except:
     return "Invalid input, chump!"
-  net.quick_train(inputVar, [val])
-  reportString = "Trained. New output: " + str(net.predict(inputVar))
+  #net.quick_train(inputVar, [val])
+  net.train([var])
+  reportString = "Trained. New output: "# + str(net.predict(inputVar))
   return reportString
   
 def get_weather(location='Auckland,nz'):
