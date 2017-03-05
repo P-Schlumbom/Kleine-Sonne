@@ -231,14 +231,15 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "FNN-integration: 1.0"
+    return "FNN-integration: 1.1"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "fnn?" in incoming:
     try:
       #net = FNN(3, 6, 1, 'mem_1.txt')
       #return str(net)
-      return decide_sweater()
+      resp = str(decide_sweater())
+      return resp
     except:
       return "FNN dont wanna FNN"
   else:
