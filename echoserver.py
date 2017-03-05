@@ -297,12 +297,16 @@ def get_data():
   return input_var
 
 def decide_sweater():
+  print("CREATING NETWORK")
   net = FNN(3, 6, 1, 'mem_1.txt')
+  print("GETTING DATA")
   try:
     inputVar = get_data()
   except:
     return "Can't get data! PANIC!!!"
+  print("PREDICTING")
   prediction = net.predict()
+  print(prediction)
   if prediction[0] > 0:
     return "You'll need a sweater"
   else:
