@@ -177,6 +177,9 @@ witAccessToken = '3KNHMXJ5LNQPUCRSKH3JJDIZTTQW4QEX'   # use this to access wit
 witResponse = ""
 feedbackReport = "No Report"
 
+net = FNN(3, 6, 1, 'mem_1.txt')
+inputVar = []
+
 @app.route('/', methods=['GET'])
 def handle_verification():
   if request.args.get('hub.verify_token', '') == 'my_voice_is_my_password_verify_me':
@@ -231,7 +234,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "FNN-integration: 1.2"
+    return "FNN-integration: 2.0"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "fnn?" in incoming:
@@ -244,6 +247,10 @@ def process_message(incoming):
       return resp
     except:
       return "FNN dont wanna FNN"
+  elif "train:0" in incoming:
+    return train_sweater(0)
+  elif "train:1" in incoming:
+    return train_sweater(1)
   else:
     try:
       #wit_run(incoming)
@@ -278,7 +285,7 @@ def get_data():
   gets weather data over the internet, formats it and stores in in the input variable x
   :return: vector of input variables to be fed into the network
   '''
-  input_var = []
+  i_var = []
   #observation = owm.weather_at_place(location)
   observation = owm.weather_at_place('Auckland,nz')
   w = observation.get_weather()
@@ -289,32 +296,42 @@ def get_data():
   cloud_cover = w.get_clouds()
   press = w.get_pressure()['press']
 
-  input_var.append(normalise(wind, 40))
-  input_var.append(normalise(wind_dir, 360))
-  input_var.append(normalise(humid, 100))
-  input_var.append(normalise(temp, 35))
-  input_var.append(normalise(cloud_cover, 100))
-  input_var.append(normalise(press, 1085, 870))
+  i_var.append(normalise(wind, 40))
+  i_var.append(normalise(wind_dir, 360))
+  i_var.append(normalise(humid, 100))
+  i_var.append(normalise(temp, 35))
+  i_var.append(normalise(cloud_cover, 100))
+  i_var.append(normalise(press, 1085, 870))
 
-  return input_var
+  return i_var
 
 def decide_sweater():
-  print("CREATING NETWORK")
-  net = FNN(3, 6, 1, 'mem_1.txt')
-  print("GETTING DATA")
-  inputVar = []
+  #print("CREATING NETWORK")
+  #net = FNN(3, 6, 1, 'mem_1.txt')
+  #print("GETTING DATA")
+  #inputVar = []
   try:
     inputVar = get_data()
   except:
     return "Can't get data! PANIC!!!"
-  print("PREDICTING")
+  #print("PREDICTING")
   prediction = net.predict(inputVar)
-  print(prediction)
+  #print(prediction)
   if prediction[0] > 0:
     return "You'll need a sweater"
   else:
     return "You won't need a sweater"
 
+def train_sweater(expectedVal):
+  val = 0
+  try:
+    val = int(expectedVal)
+  except:
+    return "Invalid input, chump!"
+  net.quick_train(inputVar, [val])
+  reportString = "Trained. New output: " + str(net.predict(inputVar))
+  return reportString
+  
 def get_weather(location='Auckland,nz'):
   """
   simply tries to retrieve the current weather status in Auckland, returns a warning instead if this isn't possible
