@@ -328,9 +328,13 @@ def train_sweater(expectedVal):
     val = int(expectedVal)
   except:
     return "Invalid input, chump!"
-  #net.quick_train(inputVar, [val])
-  net.train([val])
-  reportString = "Trained. New output: "# + str(net.predict(inputVar))
+  
+  try:
+    net.quick_train(inputVar, [val])
+    #net.train([val])
+  except:
+    return "Cannot Quicktrain!"
+  reportString = "Trained. New output: " + str(net.predict(inputVar))
   return reportString
   
 def get_weather(location='Auckland,nz'):
