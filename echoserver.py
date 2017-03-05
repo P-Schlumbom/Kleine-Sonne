@@ -231,12 +231,12 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "FNN-integration: 0.2"
+    return "FNN-integration: 0.3"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "fnn?" in incoming:
     try:
-      net = FNN(3, 6, 1)
+      net = FNN(3, 6, 1, 'mem_1')
       return str(net)
     except:
       return "FNN dont wanna FNN"
@@ -247,7 +247,7 @@ def process_message(incoming):
       #return witResponse
       return witResponse
     except:
-      return "My dynos are spent. My line has ended. Heroku has deserted us. Wit.ai's betrayed me. Abandon your posts! Flee, flee for your lives!"
+      return "My dynos are spent. My line has ended. Heroku has deserted us. Wit.ai's betrayed me. Abandon your posts! Flee, flee for your lives!"    
 
 def get_weather(location='Auckland,nz'):
   """
