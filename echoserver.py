@@ -236,7 +236,7 @@ def process_message(incoming):
     return str(np.random.rand())
   elif "fnn?" in incoming:
     try:
-      net = FNN(3, 6, 1, 'mem_1')
+      net = FNN(3, 6, 1, 'mem_1.txt')
       return str(net)
     except:
       return "FNN dont wanna FNN"
