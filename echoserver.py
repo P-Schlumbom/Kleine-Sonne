@@ -4,6 +4,7 @@ import requests
 import numpy as np
 import pyowm
 from wit import Wit
+from FNN_5 import FNN
 
 app = Flask(__name__)
 
@@ -74,9 +75,12 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "master: 1.0"
+    return "FNN-integration: 0.0"
   elif "random?" in incoming:
     return str(np.random.rand())
+  elif "fnn?" in incoming:
+    net = FNN(3, 6, 1)
+    return net
   else:
     try:
       #wit_run(incoming)
