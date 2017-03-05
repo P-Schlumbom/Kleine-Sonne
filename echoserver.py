@@ -67,7 +67,7 @@ class FNN:
 
       for i in range(self.nHidden):
           pval1 = 0
-          for j in range(self.nInFeat + 1):  # for every node in h1, calculate the sum of the ingoing weights multiplied by the pval of each ingoing neuron (incöuding the bias node)
+          for j in range(self.nInFeat + 1):  # for every node in h1, calculate the sum of the ingoing weights multiplied by the pval of each ingoing neuron (including the bias node)
               pval1 += self.h[0][1][i][j] * self.x[0][j][0]
           self.h[0][0][i][0] = self.logistic_activation_function(pval1)  # update the pval for h1 neuron i
 
@@ -75,13 +75,13 @@ class FNN:
           #self.h[i][0] = [[j, 0] for j in ]
           for i in range(self.nHidden):
               pval1 = 0
-              for j in range(self.nHidden + 1):  # for every node in h1, calculate the sum of the ingoing weights multiplied by the pval of each ingoing neuron (incöuding the bias node)
+              for j in range(self.nHidden + 1):  # for every node in h1, calculate the sum of the ingoing weights multiplied by the pval of each ingoing neuron (including the bias node)
                   pval1 += self.h[k][1][i][j] * self.h[k-1][0][j][0]
               self.h[k][0][i][0] = self.logistic_activation_function(pval1)  # update the pval for h1 neuron i
 
       for i in range(self.nOutFeat):
           pval1 = 0
-          for j in range(self.nHidden + 1):  # for every node in h, calculate the sum of the ingoing weights multiplied by the pval of each ingoing neuron (incöuding the bias node)
+          for j in range(self.nHidden + 1):  # for every node in h, calculate the sum of the ingoing weights multiplied by the pval of each ingoing neuron (including the bias node)
               pval1 += self.y[1][i][j] * self.h[len(self.h) - 1][0][j][0]
           self.y[0][i][0] = self.logistic_activation_function(pval1)  # update the pval for y neuron i
 
