@@ -235,15 +235,15 @@ def process_message(incoming):
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "fnn?" in incoming:
-    #resp = str(decide_sweater())
-    #return resp
-    try:
-      #net = FNN(3, 6, 1, 'mem_1.txt')
-      #return str(net)
-      resp = str(decide_sweater())
-      return resp
-    except:
-      return "FNN dont wanna FNN"
+    resp = str(decide_sweater())
+    return resp
+    #try:
+    #  #net = FNN(3, 6, 1, 'mem_1.txt')
+    #  #return str(net)
+    #  resp = str(decide_sweater())
+    #  return resp
+    #except:
+    #  return "FNN dont wanna FNN"
   else:
     try:
       #wit_run(incoming)
