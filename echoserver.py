@@ -231,13 +231,14 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "FNN-integration: 0.3"
+    return "FNN-integration: 1.0"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "fnn?" in incoming:
     try:
-      net = FNN(3, 6, 1, 'mem_1.txt')
-      return str(net)
+      #net = FNN(3, 6, 1, 'mem_1.txt')
+      #return str(net)
+      return decide_sweater()
     except:
       return "FNN dont wanna FNN"
   else:
@@ -248,6 +249,63 @@ def process_message(incoming):
       return witResponse
     except:
       return "My dynos are spent. My line has ended. Heroku has deserted us. Wit.ai's betrayed me. Abandon your posts! Flee, flee for your lives!"    
+
+def normalise(data, ma, mi=0):
+  '''
+  given data value and an acceptable range, normalises it to a value in the range 0-1 corresponding to the given range. If data is None, returns 0.5 (i.e. 'average')
+  :param data: input value to normalise
+  :param ma: maximum value, representing '1'
+  :param mi: minimum value, representing '0'; 0 by default
+  :return: float data value normalised to range 0-1
+  '''
+  if data is not None:
+    data = data - mi
+    ma -= mi
+    data /= ma
+    if data < 0:
+        data = 0
+    if data > 1:
+        data = 1
+  else:
+    data = 0.5
+  return data
+
+def get_data():
+  '''
+  gets weather data over the internet, formats it and stores in in the input variable x
+  :return: vector of input variables to be fed into the network
+  '''
+  input_var = []
+  #observation = owm.weather_at_place(location)
+  observation = owm.weather_at_place('Auckland,nz')
+  w = observation.get_weather()
+  wind = w.get_wind()['speed']
+  wind_dir = w.get_wind()['deg']
+  humid = w.get_humidity()
+  temp = w.get_temperature('celsius')['temp']
+  cloud_cover = w.get_clouds()
+  press = w.get_pressure()['press']
+
+  input_var.append(normalise(wind, 40))
+  input_var.append(normalise(wind_dir, 360))
+  input_var.append(normalise(humid, 100))
+  input_var.append(normalise(temp, 35))
+  input_var.append(normalise(cloud_cover, 100))
+  input_var.append(normalise(press, 1085, 870))
+
+  return input_var
+
+def decide_sweater():
+  net = FNN(3, 6, 1, 'mem_1.txt')
+  try:
+    inputVar = get_data()
+  except:
+    return "Can't get data! PANIC!!!"
+  prediction = net.predict()
+  if prediction[0] > 0:
+    return "You'll need a sweater"
+  else:
+    return "You won't need a sweater"
 
 def get_weather(location='Auckland,nz'):
   """
