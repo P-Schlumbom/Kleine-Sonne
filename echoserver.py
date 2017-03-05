@@ -178,7 +178,7 @@ witResponse = ""
 feedbackReport = "No Report"
 
 net = FNN(3, 6, 1, 'mem_1.txt')
-inputVar = []
+#inputVar = []
 
 @app.route('/', methods=['GET'])
 def handle_verification():
@@ -234,7 +234,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "FNN-integration: 2.3"
+    return "FNN-integration: 2.4"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "fnn?" in incoming:
@@ -309,7 +309,7 @@ def decide_sweater():
   #print("CREATING NETWORK")
   #net = FNN(3, 6, 1, 'mem_1.txt')
   #print("GETTING DATA")
-  #inputVar = []
+  inputVar = []
   try:
     inputVar = get_data()
   except:
@@ -336,7 +336,7 @@ def train_sweater(expectedVal):
     return "Cannot Quicktrain!"
   reportString = ""
   try:
-    reportString = "Trained. New output: " + str(net.predict(inputVar))
+    reportString = "Trained. New output: " + str(net.predict(get_data()))
   except:
     reportString = "failed to predict!"
   return reportString
