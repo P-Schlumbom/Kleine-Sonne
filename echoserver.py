@@ -234,7 +234,7 @@ def process_message(incoming):
   elif "jeder fuer sich" in incoming:
     return "und gott gegen alle"
   elif "version?" in incoming:
-    return "FNN-integration: 2.4"
+    return "FNN-integration: 2.4.1"
   elif "random?" in incoming:
     return str(np.random.rand())
   elif "fnn?" in incoming:
@@ -251,6 +251,8 @@ def process_message(incoming):
     return train_sweater(0)
   elif "train:1" in incoming:
     return train_sweater(1)
+  elif "network?" in incoming:
+    return str(net)
   else:
     try:
       #wit_run(incoming)
